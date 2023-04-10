@@ -61,10 +61,11 @@ def get_innodb_page_type(myargv):
         if '-v' in myargv.parms:
             if page_type == '45bf':
                 page_level = mach_read_from_n(page, FIL_PAGE_DATA + PAGE_LEVEL, 2)
-                print("page offset %s, page type <%s>, page level <%s>" % (
-                    page_offset, innodb_page_type[page_type], page_level))
+                index_id = mach_read_from_n(page, FIL_PAGE_DATA + PAGE_LEVEL+2, 8)
+                print("page offset %d, page type <%s>, page level <%d>, index id <%d>" % (
+                    int(page_offset, 16), innodb_page_type[page_type], int(page_level, 16), int(index_id, 16)))
             else:
-                print("page offset %s, page type <%s>" % (page_offset, innodb_page_type[page_type]))
+                print("page offset %s, page type <%s>" % (int(page_offset, 16), innodb_page_type[page_type]))
         if page_type not in ret:
             ret[page_type] = 1
         else:
